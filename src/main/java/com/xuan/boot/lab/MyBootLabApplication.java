@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GowaterBackApplication {
+public class MyBootLabApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GowaterBackApplication.class, args);
+		SpringApplication.run(MyBootLabApplication.class, args);
 	}
 
 }
