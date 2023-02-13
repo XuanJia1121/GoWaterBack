@@ -10,6 +10,7 @@ import lombok.Data;
 public class Customer implements Serializable { 
 	
 	private static final long serialVersionUID = -2961937847997736384L;
+	
 	private String cid;
 	private String username;
 	private String password;

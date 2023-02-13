@@ -12,11 +12,15 @@ import com.xuan.boot.lab.dto.CustomerDto;
 import com.xuan.boot.lab.service.CustomerService;
 
 @RestController
+@RequestMapping("/customer")
 public class CustomerController {
 	
 	@Autowired
 	CustomerService customerService;
 	
-	
+	@RequestMapping("/hello")
+	public String hello() {
+		return "Hello Customer Controller";
+	}
 	
 }
