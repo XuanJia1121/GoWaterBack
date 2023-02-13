@@ -20,7 +20,7 @@ public class CustomerController {
 	
 	@RequestMapping("/hello")
 	public String hello() {
-		return "Hello Customer Controller";
+		return "哈哈哈摟";
 	}
 	
 }

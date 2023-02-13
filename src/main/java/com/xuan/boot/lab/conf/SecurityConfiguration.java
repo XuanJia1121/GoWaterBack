@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
+import com.xuan.boot.lab.enums.UrlPatten;
 import com.xuan.boot.lab.service.BaseLoginFailService;
 import com.xuan.boot.lab.service.BaseLoginSuccessService;
 import com.xuan.boot.lab.service.OauthSuccessService;
@@ -29,32 +30,23 @@ public class SecurityConfiguration {
 	BaseLoginFailService baseLoginFailService;
 	
 	@Bean
-    public LocaleResolver localeResolver() {
-        CookieLocaleResolver localeResolver = new CookieLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.CHINESE);
-        return localeResolver;
-    }
-	
-	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		//Login
 		http.formLogin()
-			.loginPage("/customer/toLogin")
+			.loginPage(UrlPatten.CUSTOMER_TOLOGIN.getUrl())
 			.loginProcessingUrl("/customer/loginAction")
-			.usernameParameter("username")
-			.passwordParameter("password")
 			.successHandler(baseLoginSuccessService)
 			.failureHandler(baseLoginFailService)
 			.and()
 			.userDetailsService(userDetailAuthService);
 		//request setting
 		http.authorizeRequests()
-			.antMatchers("/customer/toLogin","/customer/register","/customer/registerAction").permitAll()
+			.antMatchers(UrlPatten.unSecurityUrl()).permitAll()
 			.anyRequest().authenticated()
 			.and().csrf().disable();
 		//Oauth2
 		http.oauth2Login()
-			.loginPage("/customer/toLogin")
+			.loginPage(UrlPatten.CUSTOMER_TOLOGIN.getUrl())
 			.successHandler(oauthSuccessService);
 		return http.build();
 	}
