@@ -11,8 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
-import com.xuan.boot.lab.service.BaseFailService;
-import com.xuan.boot.lab.service.BaseSuccessService;
+import com.xuan.boot.lab.service.BaseLoginFailService;
+import com.xuan.boot.lab.service.BaseLoginSuccessService;
 import com.xuan.boot.lab.service.OauthSuccessService;
 import com.xuan.boot.lab.service.UserDetailAuthService;
 
@@ -24,9 +24,9 @@ public class SecurityConfiguration {
 	@Autowired
 	OauthSuccessService oauthSuccessService;
 	@Autowired
-	BaseSuccessService baseSuccessService;
+	BaseLoginSuccessService baseLoginSuccessService;
 	@Autowired
-	BaseFailService baseFailService;
+	BaseLoginFailService baseLoginFailService;
 	
 	@Bean
     public LocaleResolver localeResolver() {
@@ -43,8 +43,8 @@ public class SecurityConfiguration {
 			.loginProcessingUrl("/customer/loginAction")
 			.usernameParameter("username")
 			.passwordParameter("password")
-			.successHandler(baseSuccessService)
-			.failureHandler(baseFailService)
+			.successHandler(baseLoginSuccessService)
+			.failureHandler(baseLoginFailService)
 			.and()
 			.userDetailsService(userDetailAuthService);
 		//request setting

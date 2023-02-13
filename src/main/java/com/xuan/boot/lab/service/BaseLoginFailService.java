@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.stereotype.Component;
 
 @Component
-public class BaseFailService implements AuthenticationFailureHandler {
+public class BaseLoginFailService implements AuthenticationFailureHandler {
 	
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy(); 
 	

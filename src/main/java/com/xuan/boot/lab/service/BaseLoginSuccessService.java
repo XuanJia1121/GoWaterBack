@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import com.xuan.boot.lab.utils.JwtUtil;
 
 @Component
-public class BaseSuccessService implements AuthenticationSuccessHandler {
+public class BaseLoginSuccessService implements AuthenticationSuccessHandler {
 	
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy(); 
 
