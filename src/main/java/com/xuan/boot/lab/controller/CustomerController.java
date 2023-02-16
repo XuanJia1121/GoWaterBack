@@ -8,13 +8,13 @@ import com.xuan.boot.lab.service.CustomerService;
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
-	
+
 	@Autowired
 	CustomerService customerService;
 
 	@RequestMapping("/hello")
 	public String hello() {
-		return "哈哈哈";
+		return "哈哈哈XXD";
 	}
 	
 }
