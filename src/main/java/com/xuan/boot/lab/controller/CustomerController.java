@@ -14,7 +14,7 @@ public class CustomerController {
 
 	@RequestMapping("/hello")
 	public String hello() {
-		return "哈哈哈摟";
+		return "哈哈哈";
 	}
 	
 }
