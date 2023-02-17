@@ -9,7 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 public class JwtUtil {
 
-	public final static String JWT_KEY = "MySecret";
+	public final static String JWT_KEY = "MySecretKey";
 	public final static String JWT_PREFIX = "Bearer ";
 	public final static String HEADER = "Authorization";
 	

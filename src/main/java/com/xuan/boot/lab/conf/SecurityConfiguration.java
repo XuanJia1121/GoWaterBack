@@ -31,7 +31,7 @@ public class SecurityConfiguration {
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		//Login
+		//Base Login
 		http.formLogin()
 			.loginPage(UrlPatten.CUSTOMER_TOLOGIN.getUrl())
 			.loginProcessingUrl("/customer/loginAction")
@@ -44,7 +44,7 @@ public class SecurityConfiguration {
 			.antMatchers(UrlPatten.unSecurityUrl()).permitAll()
 			.anyRequest().authenticated()
 			.and().csrf().disable();
-		//Oauth2
+		//Oauth2 Google Login
 		http.oauth2Login()
 			.loginPage(UrlPatten.CUSTOMER_TOLOGIN.getUrl())
 			.successHandler(oauthSuccessService);
