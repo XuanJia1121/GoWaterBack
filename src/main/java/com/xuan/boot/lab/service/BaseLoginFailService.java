@@ -7,19 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
+
+import com.xuan.boot.lab.utils.ResponseUtil;
 
 @Component
 public class BaseLoginFailService implements AuthenticationFailureHandler {
 	
-	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy(); 
-	
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-		redirectStrategy.sendRedirect(request, response, "/customer/loginFail");
+		ResponseUtil.response(response, HttpServletResponse.SC_BAD_REQUEST,"登入失敗!");
 	}
 
 }

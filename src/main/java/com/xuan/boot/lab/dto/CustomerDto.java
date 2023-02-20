@@ -2,11 +2,11 @@ package com.xuan.boot.lab.dto;
 
 import java.io.Serializable;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@NoArgsConstructor
 public class CustomerDto implements Serializable {
 	
 	private static final long serialVersionUID = 4707778276917441795L;

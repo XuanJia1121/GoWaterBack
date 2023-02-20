@@ -1,17 +1,16 @@
 package com.xuan.boot.lab.conf;
 
-import java.util.Locale;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.xuan.boot.lab.enums.UrlPatten;
+import com.xuan.boot.lab.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.xuan.boot.lab.service.BaseLoginFailService;
 import com.xuan.boot.lab.service.BaseLoginSuccessService;
 import com.xuan.boot.lab.service.OauthSuccessService;
@@ -41,15 +40,26 @@ public class SecurityConfiguration {
 			.userDetailsService(userDetailAuthService);
 		//request setting
 		http.authorizeRequests()
+			.antMatchers(HttpMethod.OPTIONS).permitAll()
 			.antMatchers(UrlPatten.unSecurityUrl()).permitAll()
 			.anyRequest().authenticated()
-			.and().csrf().disable();
+			.and()
+			.csrf().disable();
 		//Oauth2 Google Login
 		http.oauth2Login()
-			.loginPage(UrlPatten.CUSTOMER_TOLOGIN.getUrl())
 			.successHandler(oauthSuccessService);
+		//Cros
+		http.cors();
+		//json valid
+		http.addFilterAt(getCustomUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
+	
+	@Bean 
+	public CustomUsernamePasswordAuthenticationFilter getCustomUsernamePasswordAuthenticationFilter() {
+		return new CustomUsernamePasswordAuthenticationFilter();
+	}
+	
 	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
