@@ -1,7 +1,5 @@
 package com.xuan.boot.lab.enums;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +9,6 @@ public enum UrlPatten {
 	
 	//customer
 	HELLO("N","/customer/hello"),
-	CUSTOMER_TOLOGIN("N","/customer/toLogin"),
 	CUSTOMER_LOGIN("N","/customer/loginAction");
 	
 	private final String isSecur;

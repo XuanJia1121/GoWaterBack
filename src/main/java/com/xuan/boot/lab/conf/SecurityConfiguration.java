@@ -1,13 +1,19 @@
 package com.xuan.boot.lab.conf;
 
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.xuan.boot.lab.enums.UrlPatten;
 import com.xuan.boot.lab.filter.CustomUsernamePasswordAuthenticationFilter;
@@ -17,6 +23,7 @@ import com.xuan.boot.lab.service.OauthSuccessService;
 import com.xuan.boot.lab.service.UserDetailAuthService;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfiguration {
 
 	@Autowired
@@ -27,20 +34,11 @@ public class SecurityConfiguration {
 	BaseLoginSuccessService baseLoginSuccessService;
 	@Autowired
 	BaseLoginFailService baseLoginFailService;
-	
+	 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		//Base Login
-		http.formLogin()
-			.loginPage(UrlPatten.CUSTOMER_TOLOGIN.getUrl())
-			.loginProcessingUrl("/customer/loginAction")
-			.successHandler(baseLoginSuccessService)
-			.failureHandler(baseLoginFailService)
-			.and()
-			.userDetailsService(userDetailAuthService);
 		//request setting
 		http.authorizeRequests()
-			.antMatchers(HttpMethod.OPTIONS).permitAll()
 			.antMatchers(UrlPatten.unSecurityUrl()).permitAll()
 			.anyRequest().authenticated()
 			.and()
@@ -56,10 +54,21 @@ public class SecurityConfiguration {
 	}
 	
 	@Bean 
-	public CustomUsernamePasswordAuthenticationFilter getCustomUsernamePasswordAuthenticationFilter() {
-		return new CustomUsernamePasswordAuthenticationFilter();
+	public CustomUsernamePasswordAuthenticationFilter getCustomUsernamePasswordAuthenticationFilter() throws Exception {
+		CustomUsernamePasswordAuthenticationFilter filter = new CustomUsernamePasswordAuthenticationFilter(authenticationManagerBean());
+		filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(UrlPatten.CUSTOMER_LOGIN.getUrl(), "POST"));
+		filter.setAuthenticationSuccessHandler(baseLoginSuccessService);
+		filter.setAuthenticationFailureHandler(baseLoginFailService);
+		return filter;
 	}
 	
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(userDetailAuthService);
+		provider.setPasswordEncoder(passwordEncoder());
+		return new ProviderManager(Collections.singletonList(provider));
+	}
 	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {

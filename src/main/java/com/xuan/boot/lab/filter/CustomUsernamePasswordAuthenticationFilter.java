@@ -6,7 +6,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,16 +19,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CustomUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+	private AuthenticationManager authenticationManager;
+
+	public CustomUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
+		this.authenticationManager = authenticationManager;
+		super.setAuthenticationManager(authenticationManager);
+	}
+
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+		//只接受Post請求
 		if (!request.getMethod().equals("POST")) {
 			throw new AuthenticationServiceException("Authentication method not supported" + request.getMethod());
 		}
-		// 说明是以json的形式传递参数
+		// 確認是JSON格式
 		if (request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)) {
 			String username = null;
 			String password = null;
-			// 将传入的json数据转换成map再通过get("key")获得
 			try {
 				Map<String, String> map = new ObjectMapper().readValue(request.getInputStream(), Map.class);
 				username = map.get("username");
@@ -34,12 +43,11 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
-			if (username == null) {
-
+			if (StringUtils.isBlank(username)) {
+				throw new AuthenticationServiceException("username 錯誤!");
 			}
-			if (password == null) {
-
+			if (StringUtils.isBlank(password)) {
+				throw new AuthenticationServiceException("password 錯誤!");
 			}
 			username = username.trim();
 			UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username,password);

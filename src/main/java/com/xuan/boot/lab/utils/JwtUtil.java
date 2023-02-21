@@ -18,7 +18,7 @@ public class JwtUtil {
 		String token =  Jwts.builder()
 				.setSubject(username)
 				.setExpiration(expireDate)
-				// MySecret是自訂的私鑰，HS512是自選的演算法，可以任意改變
+				//MySecretKey是自訂的私鑰，HS512是自選的演算法，可以任意改變
 				.signWith(SignatureAlgorithm.HS512, JWT_KEY).compact();
 		return StringUtils.join(JWT_PREFIX + token);
 	}

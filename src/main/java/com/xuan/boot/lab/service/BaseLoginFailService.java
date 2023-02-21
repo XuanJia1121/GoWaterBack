@@ -17,7 +17,7 @@ public class BaseLoginFailService implements AuthenticationFailureHandler {
 	
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-		ResponseUtil.response(response, HttpServletResponse.SC_BAD_REQUEST,"登入失敗!");
+		ResponseUtil.response(response, HttpServletResponse.SC_BAD_REQUEST,"登入失敗");
 	}
 
 }
