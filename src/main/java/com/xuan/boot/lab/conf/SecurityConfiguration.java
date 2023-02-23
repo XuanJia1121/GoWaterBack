@@ -10,13 +10,16 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.xuan.boot.lab.enums.UrlPatten;
 import com.xuan.boot.lab.filter.CustomUsernamePasswordAuthenticationFilter;
+import com.xuan.boot.lab.filter.MyAuthenticationFilter;
 import com.xuan.boot.lab.service.BaseLoginFailService;
 import com.xuan.boot.lab.service.BaseLoginSuccessService;
 import com.xuan.boot.lab.service.OauthSuccessService;
@@ -50,6 +53,9 @@ public class SecurityConfiguration {
 		http.cors();
 		//json valid
 		http.addFilterAt(getCustomUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(getMyAuthenticationFilter(), BasicAuthenticationFilter.class);
+		//close session
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		return http.build();
 	}
 	
@@ -60,6 +66,11 @@ public class SecurityConfiguration {
 		filter.setAuthenticationSuccessHandler(baseLoginSuccessService);
 		filter.setAuthenticationFailureHandler(baseLoginFailService);
 		return filter;
+	}
+	
+	@Bean
+	public MyAuthenticationFilter getMyAuthenticationFilter() {
+		return new MyAuthenticationFilter();
 	}
 	
 	@Bean
