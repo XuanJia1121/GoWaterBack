@@ -14,5 +14,5 @@ public class CustomerDto implements Serializable {
 	private String username;
 	private String password;
 	private String email;
-	
+	private String token;
 }

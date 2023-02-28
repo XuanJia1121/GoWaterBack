@@ -14,6 +14,8 @@ public class ProductService {
 	
 	@Autowired
 	ProductDao productDao; 
+	@Autowired
+	OrderService orderService;
 	
 	public List<ProductDto> selectAllProduct(){
 		return productDao.selectAllProduct().stream().map(t -> {
