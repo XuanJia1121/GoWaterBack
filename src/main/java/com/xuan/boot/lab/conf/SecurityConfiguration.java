@@ -42,8 +42,9 @@ public class SecurityConfiguration {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		//request setting
 		http.authorizeRequests()
-			.antMatchers(UrlPatten.unSecurityUrl()).permitAll()
-			.anyRequest().authenticated()
+//			.antMatchers(UrlPatten.unSecurityUrl()).permitAll()
+//			.anyRequest().authenticated()
+			.anyRequest().permitAll()
 			.and()
 			.csrf().disable();
 		//Oauth2 Google Login

@@ -8,8 +8,12 @@
 	</select>
 	
 	<select id="selectById" resultType="com.xuan.boot.lab.domain.Order">
-		SELECT * FROM orders where cid = ${id}
+		SELECT * FROM orders where cid = #{id}
 	</select>
+	
+	<insert id="insertOrder">
+		insert into orders(id,cid,detail) values (#{id},#{cid},#{detail})
+	</insert>
 	
 </mapper>
 

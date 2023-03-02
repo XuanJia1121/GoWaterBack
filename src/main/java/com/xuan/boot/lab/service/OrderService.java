@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xuan.boot.lab.dao.OrdersDao;
-import com.xuan.boot.lab.dto.CustomerDto;
+import com.xuan.boot.lab.domain.Order;
 import com.xuan.boot.lab.dto.OrderDto;
 
 @Service
@@ -17,7 +17,7 @@ public class OrderService {
 	@Autowired
 	private OrdersDao ordersDao;
 	
-	public Integer selectMaxId() {
+	private Integer selectMaxId() {
 		return Optional.ofNullable(ordersDao.selectMaxId()).orElse(0);
 	}
 	
@@ -31,8 +31,12 @@ public class OrderService {
 		}).collect(Collectors.toList());
 	}
 	
-	public void insertOrder(CustomerDto customerDto) {
-		
+	public void insertOrder(OrderDto orderDto) {
+		Order order = new Order();
+		order.setId(selectMaxId() + 1);
+		order.setCid(orderDto.getCid());
+		order.setDetail(orderDto.getDetails());
+		ordersDao.insertOrder(order);
 	}
 	
 }
