@@ -31,6 +31,7 @@ public class BaseLoginSuccessService implements AuthenticationSuccessHandler {
 		Customer customer = customerService.selectByUsername(user.getUsername());
 		//dto
 		CustomerDto customerDto = new CustomerDto();
+		customerDto.setCid(customer.getCid());
 		customerDto.setUsername(customer.getUsername());
 		customerDto.setEmail(customer.getEmail());
 		customerDto.setToken(token);

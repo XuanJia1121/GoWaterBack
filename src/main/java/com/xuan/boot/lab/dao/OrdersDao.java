@@ -13,4 +13,6 @@ public interface OrdersDao {
 	
 	List<Order> selectById(Integer id);
 	
+	void insertOrder(Order order);
+	
 }

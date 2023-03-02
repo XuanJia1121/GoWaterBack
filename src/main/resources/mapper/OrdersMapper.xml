@@ -7,5 +7,9 @@
 		SELECT max(id) FROM orders
 	</select>
 	
+	<select id="selectById" resultType="com.xuan.boot.lab.domain.Order">
+		SELECT * FROM orders where cid = ${id}
+	</select>
+	
 </mapper>
 

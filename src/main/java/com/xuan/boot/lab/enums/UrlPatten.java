@@ -14,7 +14,11 @@ public enum UrlPatten {
 	CUSTOMER_LOGIN("N","/customer/loginAction"),
 	
 	//product 
-	ALL_PRODUCT("N","/product/all");
+	ALL_PRODUCT("N","/product/all"),
+	
+	//order
+	ALL_ORDERS("N","/orders/allOrders");
+	
 	
 	private final String isSecur;
 	private final String url;

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xuan.boot.lab.dao.OrdersDao;
+import com.xuan.boot.lab.dto.CustomerDto;
 import com.xuan.boot.lab.dto.OrderDto;
 
 @Service
@@ -28,6 +29,10 @@ public class OrderService {
 			orderDto.setDetails(t.getDetail());
 			return orderDto;
 		}).collect(Collectors.toList());
+	}
+	
+	public void insertOrder(CustomerDto customerDto) {
+		
 	}
 	
 }
