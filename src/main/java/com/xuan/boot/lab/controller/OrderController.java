@@ -28,9 +28,9 @@ public class OrderController {
 	public ResponseEntity<String> addOrder(@RequestBody OrderDto orderDto) {
 		try {
 			orderService.insertOrder(orderDto);
-			return "購買成功";
+			return ResponseEntity.ok("訂單成功");
 		} catch (Exception e) {
-			return "購買失敗";
+			return ResponseEntity.badRequest().body("訂單失敗");
 		}
 	}
 
