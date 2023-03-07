@@ -12,6 +12,7 @@ public enum UrlPatten {
 	//customer
 	HELLO("N","/customer/hello"),
 	CUSTOMER_LOGIN("N","/customer/loginAction"),
+	GOOGLE_OAUTH2("N","/login/oauth2/code/google"),
 	
 	//product 
 	ALL_PRODUCT("N","/product/all"),
