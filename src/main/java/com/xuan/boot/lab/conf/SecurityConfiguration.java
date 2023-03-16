@@ -6,12 +6,12 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -21,9 +21,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.xuan.boot.lab.enums.UrlPatten;
-import com.xuan.boot.lab.filter.CustomUsernamePasswordAuthenticationFilter;
-import com.xuan.boot.lab.filter.MyAuthenticationFilter;
+import com.xuan.boot.lab.filter.JsonFormLoginAuthenticationFilter;
+import com.xuan.boot.lab.filter.JwtAuthenticationFilter;
 import com.xuan.boot.lab.service.BaseLoginFailService;
 import com.xuan.boot.lab.service.BaseLoginSuccessService;
 import com.xuan.boot.lab.service.OauthSuccessService;
@@ -46,8 +45,6 @@ public class SecurityConfiguration {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		//request setting
 		http.authorizeRequests()
-//			.antMatchers(UrlPatten.unSecurityUrl()).permitAll()
-//			.anyRequest().authenticated()
 			.anyRequest().permitAll()
 			.and()
 			.csrf().disable();
@@ -56,26 +53,25 @@ public class SecurityConfiguration {
 			.successHandler(oauthSuccessService);
 		//Cros
 		http.cors();
-		//json valid
-		http.addFilterAt(getCustomUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-		http.addFilterBefore(getMyAuthenticationFilter(), BasicAuthenticationFilter.class);
-		//close session
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		//Json valid
+		http.addFilterAt(jsonFormLoginAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtAuthenticationFilter(), BasicAuthenticationFilter.class);
+		
 		return http.build();
 	}
 	
 	@Bean 
-	public CustomUsernamePasswordAuthenticationFilter getCustomUsernamePasswordAuthenticationFilter() throws Exception {
-		CustomUsernamePasswordAuthenticationFilter filter = new CustomUsernamePasswordAuthenticationFilter(authenticationManagerBean());
-		filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(UrlPatten.CUSTOMER_LOGIN.getUrl(), "POST"));
+	public JsonFormLoginAuthenticationFilter jsonFormLoginAuthenticationFilter() throws Exception {
+		JsonFormLoginAuthenticationFilter filter = new JsonFormLoginAuthenticationFilter(authenticationManagerBean());
+		filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(JsonFormLoginAuthenticationFilter.LOGIN_URL, HttpMethod.POST.toString()));
 		filter.setAuthenticationSuccessHandler(baseLoginSuccessService);
 		filter.setAuthenticationFailureHandler(baseLoginFailService);
 		return filter;
 	}
 	
 	@Bean
-	public MyAuthenticationFilter getMyAuthenticationFilter() {
-		return new MyAuthenticationFilter();
+	public JwtAuthenticationFilter jwtAuthenticationFilter() {
+		return new JwtAuthenticationFilter();
 	}
 	
 	@Bean
@@ -94,9 +90,14 @@ public class SecurityConfiguration {
 	@Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
+        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);
+        //the below three lines will add the relevant CORS response headers
+        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

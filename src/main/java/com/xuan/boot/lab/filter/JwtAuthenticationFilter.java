@@ -8,24 +8,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.xuan.boot.lab.enums.UrlPatten;
 import com.xuan.boot.lab.utils.JwtUtil;
 import com.xuan.boot.lab.utils.ResponseUtil;
 
-public class MyAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
-		if (!UrlPatten.unSecurityUrlList().stream().anyMatch(t -> StringUtils.equals(req.getServletPath(),t))) {
+		if (!StringUtils.equals(req.getMethod(), HttpMethod.GET.toString()) && !StringUtils.equals(JsonFormLoginAuthenticationFilter.LOGIN_URL, req.getServletPath())) {
 			String authorHeader = req.getHeader(JwtUtil.HEADER);
-			String bearer = "Bearer ";
-			// 以jjwt驗證token，只要驗證成功就放行
-			// 驗證失敗會拋exception，直接將錯誤訊息傳回
-			if (authorHeader != null && authorHeader.startsWith(bearer)) {
+			//以jjwt驗證token，只要驗證成功就放行
+			//驗證失敗會拋exception，直接將錯誤訊息傳回
+			if (authorHeader != null && authorHeader.startsWith(JwtUtil.JWT_PREFIX)) {
 				try {
-					String token = authorHeader.substring(bearer.length());
+					String token = authorHeader.substring(JwtUtil.JWT_PREFIX.length());
 					JwtUtil.parseToken(token);
 					chain.doFilter(req, res);
 				} catch (Exception e) {
