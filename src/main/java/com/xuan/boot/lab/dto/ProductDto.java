@@ -1,7 +1,6 @@
 package com.xuan.boot.lab.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,9 +14,9 @@ import lombok.NoArgsConstructor;
 public class ProductDto implements Serializable {
 	
 	private static final long serialVersionUID = 4992313249461999184L;
-	private Integer id;
-	private String name;
+	private Integer pid;
+	private String pname;
 	private String description;
-	private BigDecimal price;
-	private Integer count;
+	private Integer price;
+
 }

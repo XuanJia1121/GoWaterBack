@@ -12,7 +12,7 @@ public class JsonUtil {
 		return objectMapper.writeValueAsString(obj);
 	}
 	
-	public static Object jsonToObject(String json,Class<?> clazz) throws JsonProcessingException {
+	public static Object jsonToObject(String json, Class<?> clazz) throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		return objectMapper.readValue(json, clazz);
 	}

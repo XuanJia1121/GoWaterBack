@@ -25,7 +25,6 @@ import com.xuan.boot.lab.filter.JsonFormLoginAuthenticationFilter;
 import com.xuan.boot.lab.filter.JwtAuthenticationFilter;
 import com.xuan.boot.lab.service.BaseLoginFailService;
 import com.xuan.boot.lab.service.BaseLoginSuccessService;
-import com.xuan.boot.lab.service.OauthSuccessService;
 import com.xuan.boot.lab.service.UserDetailAuthService;
 
 @Configuration
@@ -33,13 +32,11 @@ import com.xuan.boot.lab.service.UserDetailAuthService;
 public class SecurityConfiguration {
 
 	@Autowired
-	UserDetailAuthService userDetailAuthService;
+	private UserDetailAuthService userDetailAuthService;
 	@Autowired
-	OauthSuccessService oauthSuccessService;
+	private BaseLoginSuccessService baseLoginSuccessService;
 	@Autowired
-	BaseLoginSuccessService baseLoginSuccessService;
-	@Autowired
-	BaseLoginFailService baseLoginFailService;
+	private BaseLoginFailService baseLoginFailService;
 	 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,15 +45,11 @@ public class SecurityConfiguration {
 			.anyRequest().permitAll()
 			.and()
 			.csrf().disable();
-		//Oauth2 Google Login
-		http.oauth2Login()
-			.successHandler(oauthSuccessService);
 		//Cros
 		http.cors();
 		//Json valid
 		http.addFilterAt(jsonFormLoginAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 		http.addFilterBefore(jwtAuthenticationFilter(), BasicAuthenticationFilter.class);
-		
 		return http.build();
 	}
 	

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.xuan.boot.lab.dto.ProductDto;
 import com.xuan.boot.lab.service.ProductService;
 
-@RequestMapping("/product")
+@RequestMapping("/api/product")
 @RestController
 public class ProductController {
 	

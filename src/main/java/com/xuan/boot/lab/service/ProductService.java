@@ -13,16 +13,14 @@ import com.xuan.boot.lab.dto.ProductDto;
 public class ProductService {
 	
 	@Autowired
-	ProductDao productDao; 
-	@Autowired
-	OrderService orderService;
+	private ProductDao productDao; 
 	
 	public List<ProductDto> selectAllProduct(){
 		return productDao.selectAllProduct().stream().map(t -> {
 			return ProductDto
 					.builder()
-					.id(t.getId())
-					.name(t.getName())
+					.pid(t.getPid())
+					.pname(t.getPname())
 					.description(t.getDescription())
 					.price(t.getPrice())
 					.build();

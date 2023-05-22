@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonFormLoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	
-	public static final String LOGIN_URL = "/customer/loginAction";
+	public static final String LOGIN_URL = "/api/customer/login";
 	
 	private AuthenticationManager authenticationManager;
 
@@ -39,14 +39,13 @@ public class JsonFormLoginAuthenticationFilter extends UsernamePasswordAuthentic
 			String username = StringUtils.EMPTY;
 			String password = StringUtils.EMPTY;
 			try {
-				Map<String, String> map = new ObjectMapper().readValue(request.getInputStream(), Map.class);
+				Map<String,String> map = new ObjectMapper().readValue(request.getInputStream(), Map.class);
 				username = map.get("username");
 				password = map.get("password");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			username = username.trim();
-			UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username,password);
+			UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(StringUtils.trim(username),StringUtils.trim(password));
 			setDetails(request, authRequest);
 			return this.getAuthenticationManager().authenticate(authRequest);
 		}

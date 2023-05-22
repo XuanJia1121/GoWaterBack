@@ -29,7 +29,7 @@ public class BaseLoginSuccessService implements AuthenticationSuccessHandler {
 		User user = (User) authentication.getPrincipal();
 		String token = JwtUtil.genToken(user.getUsername());
 		Customer customer = customerService.selectByUsername(user.getUsername());
-		//dto
+		//Trans To Dto
 		CustomerDto customerDto = new CustomerDto();
 		customerDto.setCid(customer.getCid());
 		customerDto.setUsername(customer.getUsername());
