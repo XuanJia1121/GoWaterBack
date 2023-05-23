@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.xuan.boot.lab.domain.Customer;
 import com.xuan.boot.lab.dto.CustomerDto;
+import com.xuan.boot.lab.dto.ResponseDto;
 import com.xuan.boot.lab.utils.JsonUtil;
 import com.xuan.boot.lab.utils.JwtUtil;
 import com.xuan.boot.lab.utils.ResponseUtil;
@@ -36,7 +37,7 @@ public class BaseLoginSuccessService implements AuthenticationSuccessHandler {
 		customerDto.setEmail(customer.getEmail());
 		customerDto.setToken(token);
 		//return
-		ResponseUtil.response(response, HttpServletResponse.SC_OK, JsonUtil.objectToJson(customerDto));
+		ResponseUtil.response(response, new ResponseDto(ResponseDto.OK,JsonUtil.objectToJson(customerDto)));
 	}
 	
 }

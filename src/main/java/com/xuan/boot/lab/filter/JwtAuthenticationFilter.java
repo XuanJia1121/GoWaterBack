@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.xuan.boot.lab.dto.ResponseDto;
 import com.xuan.boot.lab.utils.JwtUtil;
 import com.xuan.boot.lab.utils.ResponseUtil;
 
@@ -28,10 +29,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 					JwtUtil.parseToken(token);
 					chain.doFilter(req, res);
 				} catch (Exception e) {
-					ResponseUtil.response(res, HttpServletResponse.SC_BAD_REQUEST, "Not Valid Token");
+					ResponseUtil.response(res, new ResponseDto(ResponseDto.BAD_REQ,"Not Valid Token"));
 				}
 			} else {
-				ResponseUtil.response(res, HttpServletResponse.SC_BAD_REQUEST, "Not Valid Token");
+				ResponseUtil.response(res, new ResponseDto(ResponseDto.BAD_REQ,"Not Valid Token"));
 			}
 		} else {
 			chain.doFilter(req, res);
