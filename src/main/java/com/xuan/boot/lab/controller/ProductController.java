@@ -1,7 +1,6 @@
 package com.xuan.boot.lab.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +15,7 @@ public class ProductController {
 	@Autowired
 	ProductService productService;
 	
-	@RequestMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/all")
 	public ResponseDto allProduct() {
 		try {
 			return new ResponseDto(ResponseDto.OK,JsonUtil.objectToJson(productService.selectAllProduct()));

@@ -15,7 +15,7 @@ public class JwtUtil {
 	public final static String HEADER = "Authorization";
 	
 	public static String genToken(String username) {
-		Date expireDate = new Date(System.currentTimeMillis() + 5 * 60 * 1000);
+		Date expireDate = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
 		String token =  Jwts.builder()
 				.setSubject(username)
 				.setExpiration(expireDate)
